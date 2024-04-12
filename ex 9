@@ -1,0 +1,91 @@
+//employee.java
+package pack;
+public class Employee {
+    public String name;
+    public String department;
+    public double salary;
+    public Date hireDate;
+public Employee(String name, String department, double salary, Date hireDate) {
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+        this.hireDate = hireDate;
+    }
+public String getName() {
+        return name;
+    }
+public String getDepartment() {
+        return department;
+    }
+public double getSalary() {
+        return salary;
+    }
+public Date getHireDate() {
+        return hireDate;
+    }
+public void setName(String name) {
+        this.name = name;
+    }
+public void setDepartment(String department) {
+        this.department = department;
+    }
+ public void setSalary(double salary) {
+        this.salary = salary;
+    }
+ public void setHireDate(Date hireDate) {
+        this.hireDate = hireDate;
+    }
+}
+//employeelist.java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+public class EmployeeList {
+    private List<Employee> employees;
+ public EmployeeList() {
+        employees = new ArrayList<>();
+    }
+public void addEmployee(Employee employee) {
+        employees.add(employee);
+    }
+public List<Employee> getEmployees() {
+        return employees;
+    }
+public void sortByName() {
+        Collections.sort(employees, Comparator.comparing(Employee::getName));
+    }
+}
+//employee.jsp
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="Employee" %>
+<%@ page import="EmployeeList" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+    EmployeeList employeesList = (EmployeeList) request.getAttribute("employeesList");
+    employeesList.sortByName();
+    List<Employee> employees = employeesList.getEmployees();
+%>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Salary</th>
+      <th>Hire Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <c:forEach var="employee" items="${employees}">
+      <tr style="${employee.salary > 100000 ? 'background-color: yellow;' : ''}">
+        <td>${employee.name}</td>
+        <td>${employee.department}</td>
+        <td><fmt:formatNumber value="${employee.salary}" type="currency" /></td>
+        <td><fmt:formatDate value="${employee.hireDate}" pattern="MM/dd/yyyy" /></td>
+      </tr>
+    </c:forEach>
+  </tbody>
+</table>
+
